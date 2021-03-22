@@ -1,6 +1,8 @@
 const express = require('express')
 const request = require('request')
 const app = express()
+const dotenv = require('dotenv')
+dotenv.config()
 //middlewares
 app.set("view engine", "ejs")
 /* routing
@@ -16,7 +18,7 @@ app.get('/', (req,res)=>{
 app.get('/result', (req, res)=>{
     console.log(req.query)
    // res.send(`you have searched for ${req.query.Moviename}`)
-    const url = `http://www.omdbapi.com/?apikey=cfd672ef&s=${req.query.Moviename}`
+    const url = `http://www.omdbapi.com/?apikey=${process.env.API_KEY}&s=${req.query.Moviename}`
     request(url, function(error, response, body){ // here using request dependency we made a request to a url which expects a callback [function]
         if(!error && response.statusCode===200){  //google http statuscode mdn : status code 200 means success
             const data = JSON.parse(body) //json is not essentially a javascript object we have to convert json into javascript objects this line does that
@@ -32,7 +34,7 @@ app.get('/result/:id', (req,res)=>{   //:rollno  here you can keep anything afte
     //console.log(req.params)   //request is a complete js object and params is one of the proprerties of the objects and this param contains whatever data we send in rollno
     //template string in javascript
     //res.send(`student roll number ${req.params.rollno}`)   // in js we should use ` not ' this
-    const url = `http://www.omdbapi.com/?apikey=cfd672ef&i=${req.params.id}`
+    const url = `http://www.omdbapi.com/?apikey=${process.env.API_KEY}&i=${req.params.id}`
     request(url, function(error, response, body){ // here using request dependency we made a request to a url which expects a callback [function]
         if(!error && response.statusCode===200){  //google http statuscode mdn : status code 200 means success
             const data = JSON.parse(body) //json is not essentially a javascript object we have to convert json into javascript objects this line does that
@@ -52,6 +54,6 @@ app.get('*', (req, res)=>{
     res.send('404 NOT FOUND')
 })
 
-app.listen(8000, ()=>{
+app.listen(3000, ()=>{
     console.log("server has started")
 })
